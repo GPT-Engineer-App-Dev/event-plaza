@@ -1,11 +1,13 @@
-import { Container, VStack, Heading, Text, Button, Box, HStack, Input, useToast } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Button, Box, HStack, Input, IconButton, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEdit, FaSave } from "react-icons/fa";
 
 const Index = () => {
+  const toast = useToast();
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState("");
-  const toast = useToast();
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingName, setEditingName] = useState("");
 
   const addEvent = () => {
     if (eventName.trim() === "") {
@@ -38,6 +40,34 @@ const Index = () => {
     });
   };
 
+  const startEditing = (index) => {
+    setEditingIndex(index);
+    setEditingName(events[index]);
+  };
+
+  const saveEdit = (index) => {
+    if (editingName.trim() === "") {
+      toast({
+        title: "Event name cannot be empty.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+    const newEvents = [...events];
+    newEvents[index] = editingName;
+    setEvents(newEvents);
+    setEditingIndex(null);
+    setEditingName("");
+    toast({
+      title: "Event updated.",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
@@ -56,10 +86,36 @@ const Index = () => {
         <VStack spacing={2} width="100%">
           {events.map((event, index) => (
             <Box key={index} width="100%" p={4} borderWidth="1px" borderRadius="md" display="flex" justifyContent="space-between" alignItems="center">
-              <Text>{event}</Text>
-              <Button size="sm" colorScheme="red" leftIcon={<FaTrash />} onClick={() => removeEvent(index)}>
-                Remove
-              </Button>
+              {editingIndex === index ? (
+                <>
+                  <Input
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    width="70%"
+                  />
+                  <IconButton
+                    icon={<FaSave />}
+                    colorScheme="green"
+                    onClick={() => saveEdit(index)}
+                  />
+                </>
+              ) : (
+                <>
+                  <Text>{event}</Text>
+                  <HStack>
+                    <IconButton
+                      icon={<FaEdit />}
+                      colorScheme="blue"
+                      onClick={() => startEditing(index)}
+                    />
+                    <IconButton
+                      icon={<FaTrash />}
+                      colorScheme="red"
+                      onClick={() => removeEvent(index)}
+                    />
+                  </HStack>
+                </>
+              )}
             </Box>
           ))}
         </VStack>
