@@ -1,6 +1,7 @@
 import { Container, VStack, Heading, Text, Button, Box, HStack, Input, IconButton, useToast } from "@chakra-ui/react";
 import { useState } from "react";
-import { FaPlus, FaTrash, FaEdit, FaSave } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEdit, FaSave, FaInfoCircle } from "react-icons/fa"; // Import FaInfoCircle icon
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Index = () => {
   const toast = useToast();
@@ -8,6 +9,7 @@ const Index = () => {
   const [eventName, setEventName] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [editingName, setEditingName] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const addEvent = () => {
     if (eventName.trim() === "") {
@@ -116,6 +118,11 @@ const Index = () => {
                       icon={<FaTrash />}
                       colorScheme="red"
                       onClick={() => removeEvent(index)}
+                    />
+                    <IconButton
+                      icon={<FaInfoCircle />}
+                      colorScheme="teal"
+                      onClick={() => navigate(`/event/${index}`)} // Navigate to event details
                     />
                   </HStack>
                 </>
