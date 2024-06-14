@@ -45,8 +45,8 @@ const Index = () => {
     setEditingName(events[index]);
   };
 
-  const saveEdit = (index) => {
-    if (editingName.trim() === "") {
+  const updateEvent = (index, newName) => {
+    if (newName.trim() === "") {
       toast({
         title: "Event name cannot be empty.",
         status: "error",
@@ -56,16 +56,20 @@ const Index = () => {
       return;
     }
     const newEvents = [...events];
-    newEvents[index] = editingName;
+    newEvents[index] = newName;
     setEvents(newEvents);
-    setEditingIndex(null);
-    setEditingName("");
     toast({
       title: "Event updated.",
       status: "success",
       duration: 2000,
       isClosable: true,
     });
+  };
+
+  const saveEdit = (index) => {
+    updateEvent(index, editingName);
+    setEditingIndex(null);
+    setEditingName("");
   };
 
   return (
