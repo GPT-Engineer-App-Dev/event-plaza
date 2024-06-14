@@ -1,8 +1,9 @@
-import { Container, VStack, Heading, Text, Button, Box, HStack, Input, useToast, IconButton } from "@chakra-ui/react";
+import { Container, VStack, Heading, Text, Button, Box, HStack, Input, IconButton, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaPlus, FaTrash, FaEdit, FaSave } from "react-icons/fa";
 
 const Index = () => {
+  const toast = useToast();
   const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
